@@ -6,20 +6,13 @@ foreach ( $_POST["admin_email"] as $key => $value ) {
 	array_push($admin_email, $value);
 }
 
+$admin_email = $_POST["admin_email"]
+
 $form_subject = trim($_POST["form_subject"]);
 
 $mail = new PHPMailer;
 $mail->CharSet = 'UTF-8';
 
-// Настройки SMTP
-// $mail->isSMTP();
-// $mail->SMTPAuth = true;
-// $mail->SMTPDebug = 0;
- 
-// $mail->Host = 'ssl://smtp.gmail.com';
-// $mail->Port = 465;
-// $mail->Username = 'Логин';
-// $mail->Password = 'Пароль';
 
 
 $c = true;

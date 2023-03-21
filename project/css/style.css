@@ -1032,8 +1032,31 @@ Gallery
 }
 
 /* модал */
+
+.stop-scroll {
+  overflow: hidden;
+  /* что бы когда появлется менюха слева нельзя было скролить, в js  примяняется прям к боди */
+}
+
 .modal {
-  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  background-color: var(--color-black-a);
+  transition: opacity .3s ease-in-out, visibility 0s .3s;
+  z-index: 10000;
+  display: flex;
+  flex-wrap: wrap;
+
+
+
+  /* display: none;
   position:absolute;
   padding: 2% 27%;
   right: 0;
@@ -1045,12 +1068,11 @@ Gallery
   visibility: hidden;
   background-color: var(--color-black-a);
   opacity: 0;
-  transition: opacity 0.3s linear;
+  transition: opacity 0.3s linear; */
 }
 
 .modal--active {
   /* при инициализации через js появляются эти стили у modal*/
-  display: block;
   visibility: visible;
   transform: none;
   opacity: 1;
@@ -1059,6 +1081,7 @@ Gallery
 .modal__container {
   position: relative;
   display: flex;
+  flex-grow: 1;
   max-width: 900px;
   height: 500px;
   font-size: 0;
@@ -1089,7 +1112,7 @@ Gallery
 
 .modal__right {
   padding: 120px 50px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 
@@ -1998,7 +2021,7 @@ showroom
   color:var(--color-purpure-ultra-light) ;
   
 }
-
+error
 .showroom__form-button:active::before {
   opacity: 0;
 }
@@ -2015,11 +2038,11 @@ showroom
   flex-direction: column-reverse;
 }
 
-.just-validate-error-field {
+.js-validate-error-field {
   border-color:var(--color-red) ;
 }
 
-.just-validate-error-label {
+.js-validate-error-label {
   color: var(--color-red);
   padding-left: 20px;
   margin-bottom: 4px;

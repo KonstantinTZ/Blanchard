@@ -60,6 +60,8 @@ modalOpen.addEventListener('click',
 
     modalWindow.classList.toggle('modal--active');
 
+    document.body.classList.toggle('stop-scroll');
+
   })
 
 modalClose.addEventListener('click', 
@@ -69,6 +71,8 @@ modalClose.addEventListener('click',
     modalOpen.classList.remove('gallery__slide-2--active');
 
     modalWindow.classList.remove('modal--active');
+
+    document.body.classList.remove('stop-scroll');
 
   })
 
@@ -369,55 +373,54 @@ function init(){
     const selector = document.querySelector("input[type='tel']");
     const im = new Inputmask("+7 (999) 999-99-99");
     im.mask(selector);
-    
-    const validation = new JustValidate('.showroom__form');
-    
-    validation
-    
-  .addField('.showroom__form-text', [{
-    rule: 'minLength',
-    value: 3,
-    errorMessage: "Вы не ввели имя"
-  },
-  {
-    rule: 'maxLength',
-    value: 15,
-    errorMessage: "Вы ввели больше чем положено"
-  }
-  ])
-  .addField('.showroom__form-tel', [{
-    rule: "function",
-    validator: function (name, value) {
-      const phone = selector.inputmask.unmaskedvalue();
-      return phone.length === 10
-    },
-    errorMessage: 'Вы не ввели телефон',
-  }]);
 
+    const validator = function(selector, rules, successModal,yaGoal){
+      new window.JustValidate(selector, {
+        rules:rules,
+        messages: {
+          name: {
+            required:'Вы не ввели имя',
+            minLength: 'Вы не ввели имя',
+            maxLength: 'Вы ввели больше чем положено'
+          },
+          tel: 'Вы не ввели телефон'
+        },
+        submitHandler:function(form){
+          let formData = new FormData(form);
 
-// отправка формы на почту
-  function validateForms(selector, rules) {
-    new window.JustValidate(selector, {
-        rules: rules,
-        submitHandler: function (form, values, ajax) {
-            console.log(form);
-
-            let formData = new FormData(form);
-
-            fetch("mail.php", {
-                method: "POST",
-                body: formData
-            })
-            .then(function(data) {
-                console.log(data);
+          let xhr = new XMLHttpRequest();
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 ) {
+              if (xhr.status === 200) {
                 console.log('Отправлено');
-                form.reset();
-            });
-        }
-    });
-}
+              }
+            }
+          }
 
-  
+          xhr.open('POST', 'mail.php', true);
+          xhr.send(formData);
+
+          form.reset();
+        }
+      })
+    }
+
+    validator('.form-2', 
+    {
+      name: {
+        required:true,
+        minLength: 3,
+        maxLength: 15,
+      },
+      tel: {
+        required:true,
+        function: (name, value) => {
+          const phone = selector.inputmask.unmaskedvalue()
+          return Number(phone) && phone.length === 10
+        }
+      }
+    })
+
   // тул типы в секции projects
   tippy('.projects__tooltip--1', {
     content: 'Пример современных тенденций — современная методология разработки',
@@ -469,3 +472,57 @@ function init(){
       //     document.querySelector(`[data-target="${path}"]`).classList.add('bar__scroll--active');
       //   });
       // });
+
+
+
+  //   Валидация форм в Новой версии just Validate 
+  //   const validation = new JustValidate('.showroom__form');
+    
+  //   validation
+    
+  // .addField('.showroom__form-text', [{
+  //   rule: 'minLength',
+  //   value: 3,
+  //   errorMessage: "Вы не ввели имя"
+  // },
+  // {
+  //   rule: 'maxLength',
+  //   value: 15,
+  //   errorMessage: "Вы ввели больше чем положено"
+  // }
+  // ])
+  // .addField('.showroom__form-tel', [{
+  //   rule: "function",
+  //   validator: function (name, value) {
+  //     const phone = selector.inputmask.unmaskedvalue();
+  //     return phone.length === 10
+  //   },
+  //   errorMessage: 'Вы не ввели телефон',
+  // }]);
+
+
+  // // Тестирование
+  // НЕ СРАБОТАЛО
+
+  //  // отправка формы на почту
+  //   .onSuccess('.showroom__form-button', [{
+  //       rules: rules,
+  //       submitHandler: function (form, values, ajax) {
+  //           console.log(form);
+
+  //           let formData = new FormData(form);
+
+  //           fetch("mail.php", {
+  //               method: "POST",
+  //               body: formData
+  //           })
+  //           .then(function(data) {
+  //               console.log(data);
+  //               console.log('Отправлено');
+  //               form.reset();
+  //           });
+  //       }
+  //   }]);
+
+
+    // тестирование
